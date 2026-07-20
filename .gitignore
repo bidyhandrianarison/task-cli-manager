@@ -1,0 +1,17 @@
+# Dart
+.dart_tool/
+.packages
+build/
+pubspec.lock
+
+# IDE
+.idea/
+.vscode/
+
+# Local task data
+.dart_task_manager/
+tasks.json
+
+# OS
+.DS_Store
+Thumbs.db
