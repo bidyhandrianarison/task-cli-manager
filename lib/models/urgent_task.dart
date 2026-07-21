@@ -13,8 +13,11 @@ class UrgentTask extends Task {
   TaskType get type => TaskType.urgent;
 
   @override
+  String get displayPrefix => '🔥';
+
+  @override
   String toString() {
     // TODO: implement toString
-    return '🔥Urgent';
+    return '$displayPrefix...';
   }
 }
