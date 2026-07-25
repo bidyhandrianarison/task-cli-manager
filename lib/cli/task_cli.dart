@@ -98,10 +98,54 @@ class TaskCli {
     final allTasks = await repository.findAll();
     if (allTasks.isEmpty) {
       print('Aucune tâche à afficher.');
-    } else {
-      for (var task in allTasks) {
-        print(task);
-      }
+      return;
+    }
+    stdout.write('''
+
+  Trier les tâches par :
+  1. Priorité
+  2. Date
+  3. Sans tri
+
+  Votre choix :
+  ''');
+    final choice = stdin.readLineSync();
+    final tasks = allTasks.toList();
+
+    switch (choice) {
+      case '1':
+        tasks.sort((a, b) {
+          return b.priority.index.compareTo(a.priority.index);
+        });
+        break;
+
+      case '2':
+        tasks.sort((a, b) {
+          if (a.deadline == null && b.deadline == null) {
+            return 0;
+          }
+
+          if (a.deadline == null) {
+            return 1;
+          }
+
+          if (b.deadline == null) {
+            return -1;
+          }
+
+          return a.deadline!.compareTo(b.deadline!);
+        });
+        break;
+
+      case '3':
+        break;
+
+      default:
+        print('Choix invalide.');
+        return;
+    }
+    for (var task in tasks) {
+      print(task);
     }
   }
 
