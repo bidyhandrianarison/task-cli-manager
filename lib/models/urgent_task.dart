@@ -14,10 +14,4 @@ class UrgentTask extends Task {
 
   @override
   String get displayPrefix => '🔥';
-
-  @override
-  String toString() {
-    // TODO: implement toString
-    return '$displayPrefix...';
-  }
 }

@@ -24,7 +24,15 @@ abstract class Task implements JsonSerializable {
 
   @override
   String toString() {
-    return '$displayPrefix...';
+    final deadlineText = deadline != null
+        ? deadline!.toIso8601String()
+        : 'Pas de deadline';
+
+    final status = isDone ? 'Terminée' : 'À faire';
+
+    return '[$id] $displayPrefix | $title | '
+        '${priority.name.toUpperCase()} | '
+        'Deadline: $deadlineText | $status';
   }
 
   @override
@@ -35,6 +43,7 @@ abstract class Task implements JsonSerializable {
       'priority': priority.name,
       'deadline': deadline?.toIso8601String(),
       'isDone': isDone,
+      'type': type.name,
     };
   }
 
