@@ -1,97 +1,100 @@
 # Dart CLI Task Manager
 
-Application de gestion de tâches en ligne de commande développée entièrement en **Dart**, sans Flutter.
+A complete command-line task management application built with **pure Dart**, without Flutter.
 
-Ce projet permet de créer, consulter, trier, terminer et supprimer des tâches depuis une interface interactive dans le terminal. Les données sont automatiquement conservées dans un fichier JSON local afin de rester disponibles entre deux exécutions.
+The application provides an interactive terminal interface for creating, listing, sorting, completing, and deleting tasks. Data is automatically persisted in a local JSON file so that tasks remain available between executions.
 
-Le projet met en pratique plusieurs concepts importants de Dart et de la programmation orientée objet :
+This project demonstrates several important Dart and object-oriented programming concepts:
 
-- classes abstraites ;
-- héritage et polymorphisme ;
-- interfaces ;
-- génériques ;
-- enums ;
-- exceptions personnalisées ;
-- programmation asynchrone ;
-- manipulation de fichiers ;
-- sérialisation JSON ;
-- tests unitaires.
+- abstract classes;
+- inheritance and polymorphism;
+- interfaces;
+- generics;
+- enums;
+- custom exceptions;
+- asynchronous programming;
+- file system operations;
+- JSON serialization;
+- unit testing.
 
 ---
 
-## Sommaire
+## Table of Contents
 
-- [Fonctionnalités](#fonctionnalités)
-- [Aperçu de l’application](#aperçu-de-lapplication)
-- [Prérequis](#prérequis)
+- [Features](#features)
+- [Application Preview](#application-preview)
+- [Requirements](#requirements)
 - [Installation](#installation)
-- [Lancement](#lancement)
-- [Utilisation](#utilisation)
-- [Persistance des données](#persistance-des-données)
-- [Architecture](#architecture)
-- [Concepts Dart utilisés](#concepts-dart-utilisés)
-- [Gestion des erreurs](#gestion-des-erreurs)
-- [Tests](#tests)
-- [Qualité du code](#qualité-du-code)
-- [Configuration avec Zed](#configuration-avec-zed)
-- [Limites actuelles](#limites-actuelles)
-- [Améliorations possibles](#améliorations-possibles)
-- [Contribution](#contribution)
+- [Running the Application](#running-the-application)
+- [Usage](#usage)
+- [Data Persistence](#data-persistence)
+- [Project Architecture](#project-architecture)
+- [Dart Concepts Demonstrated](#dart-concepts-demonstrated)
+- [Error Handling](#error-handling)
+- [Testing](#testing)
+- [Code Quality](#code-quality)
+- [Dependencies](#dependencies)
+- [Zed Configuration](#zed-configuration)
+- [Project Requirements Coverage](#project-requirements-coverage)
+- [Current Limitations](#current-limitations)
+- [Possible Improvements](#possible-improvements)
+- [Contributing](#contributing)
+- [Resources](#resources)
 
 ---
 
-## Fonctionnalités
+## Features
 
-| Fonctionnalité | Description |
+| Feature | Description |
 |---|---|
-| Ajouter une tâche | Création d’une tâche avec un titre, une priorité, un type et une deadline optionnelle |
-| Priorités | Prise en charge des priorités `low`, `medium` et `high` |
-| Types de tâches | Prise en charge des tâches normales et urgentes |
-| Deadline optionnelle | Saisie d’une date au format ISO, par exemple `2026-08-15` |
-| Lister les tâches | Affichage de toutes les tâches enregistrées |
-| Trier par priorité | Affichage de la priorité la plus élevée à la plus faible |
-| Trier par deadline | Affichage des échéances les plus proches en premier |
-| Marquer comme terminée | Modification du statut d’une tâche grâce à son identifiant |
-| Supprimer une tâche | Suppression définitive d’une tâche grâce à son identifiant |
-| Persistance JSON | Sauvegarde automatique des tâches dans `tasks.json` |
-| Identifiants automatiques | Génération d’un identifiant à partir du plus grand ID existant |
-| Gestion des erreurs | Utilisation d’exceptions personnalisées |
-| Tests unitaires | Tests du repository avec le package `test` |
+| Add a task | Create a task with a title, priority, type, and optional deadline |
+| Task priorities | Supports `low`, `medium`, and `high` priorities |
+| Task types | Supports normal and urgent tasks |
+| Optional deadline | Accepts ISO-formatted dates such as `2026-08-15` |
+| List tasks | Displays all tasks currently stored |
+| Sort by priority | Displays high-priority tasks first |
+| Sort by deadline | Displays the closest deadlines first |
+| Mark as completed | Changes a task's completion status using its ID |
+| Delete a task | Permanently removes a task using its ID |
+| JSON persistence | Automatically saves tasks to `tasks.json` |
+| Automatic IDs | Generates the next ID from the highest existing ID |
+| Custom exceptions | Uses domain-specific exceptions for expected failures |
+| Unit tests | Tests repository behavior using the `test` package |
 
 ---
 
-## Aperçu de l’application
+## Application Preview
 
-L’application propose un menu interactif :
+The application provides the following interactive menu:
 
 ```text
 ========================
       TASK MANAGER
 ========================
-1. Ajouter une tâche
-2. Lister les tâches
-3. Marquer comme terminée
-4. Supprimer une tâche
-5. Quitter
+1. Add a task
+2. List tasks
+3. Mark a task as completed
+4. Delete a task
+5. Quit
 
-Votre choix :
+Your choice:
 ```
 
-Le fonctionnement général est le suivant :
+The general application flow is:
 
 ```mermaid
 flowchart TD
-    A[Démarrage de l'application] --> B[Ouverture ou création de tasks.json]
-    B --> C[Chargement des tâches]
-    C --> D[Affichage du menu]
+    A[Start application] --> B[Open or create tasks.json]
+    B --> C[Load existing tasks]
+    C --> D[Display interactive menu]
 
-    D --> E[Ajouter une tâche]
-    D --> F[Lister les tâches]
-    D --> G[Marquer une tâche comme terminée]
-    D --> H[Supprimer une tâche]
-    D --> I[Quitter]
+    D --> E[Add a task]
+    D --> F[List tasks]
+    D --> G[Mark a task as completed]
+    D --> H[Delete a task]
+    D --> I[Quit]
 
-    E --> J[Sauvegarde JSON]
+    E --> J[Save changes to JSON]
     G --> J
     H --> J
 
@@ -101,28 +104,28 @@ flowchart TD
 
 ---
 
-## Prérequis
+## Requirements
 
-Pour exécuter le projet, il faut disposer de :
+Before running the project, make sure the following tools are installed:
 
-- Dart SDK `3.9.2` ou une version compatible avec la contrainte du projet ;
-- Git pour cloner le dépôt ;
-- un terminal ;
-- un éditeur de code comme Zed, VS Code ou IntelliJ IDEA.
+- Dart SDK `3.9.2` or a version compatible with the SDK constraint;
+- Git;
+- a terminal;
+- an editor such as Zed, Visual Studio Code, or IntelliJ IDEA.
 
-Vérifier l’installation de Dart :
+Check your Dart installation:
 
 ```bash
 dart --version
 ```
 
-Vérifier l’installation de Git :
+Check your Git installation:
 
 ```bash
 git --version
 ```
 
-Le SDK Dart peut être installé depuis la documentation officielle :
+If Dart is not installed, follow the official installation guide:
 
 <https://dart.dev/get-dart>
 
@@ -130,27 +133,27 @@ Le SDK Dart peut être installé depuis la documentation officielle :
 
 ## Installation
 
-### 1. Cloner le dépôt
+### 1. Clone the repository
 
-Remplacer `<votre-utilisateur>` par le nom du compte GitHub qui héberge le projet :
+Replace `<your-github-username>` with the GitHub username hosting the repository:
 
 ```bash
-git clone https://github.com/<votre-utilisateur>/dart-cli-manager.git
+git clone https://github.com/<your-github-username>/dart-cli-manager.git
 ```
 
-### 2. Entrer dans le projet
+### 2. Enter the project directory
 
 ```bash
 cd dart-cli-manager
 ```
 
-### 3. Installer les dépendances
+### 3. Install dependencies
 
 ```bash
 dart pub get
 ```
 
-### 4. Vérifier le projet
+### 4. Analyze the project
 
 ```bash
 dart analyze
@@ -158,17 +161,17 @@ dart analyze
 
 ---
 
-## Lancement
+## Running the Application
 
-Depuis la racine du projet :
+Run the application from the project root:
 
 ```bash
 dart run bin/task_manager.dart
 ```
 
-L’application charge les tâches depuis `tasks.json`, puis affiche le menu interactif.
+At startup, the application loads existing tasks from `tasks.json` and displays the interactive menu.
 
-Si le fichier `tasks.json` n’existe pas, il est automatiquement créé et initialisé avec une liste vide :
+If `tasks.json` does not exist, it is automatically created and initialized with an empty JSON array:
 
 ```json
 []
@@ -176,70 +179,70 @@ Si le fichier `tasks.json` n’existe pas, il est automatiquement créé et init
 
 ---
 
-## Utilisation
+## Usage
 
-### Ajouter une tâche
+### Adding a Task
 
-Dans le menu principal, saisir :
+Select the following option from the main menu:
 
 ```text
 1
 ```
 
-L’application demande ensuite les informations de la tâche.
+The application then asks for the task details.
 
-Exemple :
+Example:
 
 ```text
-Titre de la tâche: Terminer le projet Dart
-Priorité (low / medium / high) : high
-Deadline (optionnel) : 2026-08-15
-Type (normal / urgent) : urgent
+Task title: Complete the Dart project
+Priority (low / medium / high): high
+Deadline (optional): 2026-08-15
+Type (normal / urgent): urgent
 ```
 
-Les champs disponibles sont :
+The available fields are:
 
-| Champ | Obligatoire | Valeurs ou format |
+| Field | Required | Accepted value |
 |---|---:|---|
-| Titre | Oui | Texte non vide |
-| Priorité | Oui | `low`, `medium` ou `high` |
-| Deadline | Non | Date ISO, par exemple `2026-08-15` |
-| Type | Oui | `normal` ou `urgent` |
+| Title | Yes | Any non-empty text |
+| Priority | Yes | `low`, `medium`, or `high` |
+| Deadline | No | ISO date such as `2026-08-15` |
+| Type | Yes | `normal` or `urgent` |
 
-Si aucune deadline n’est nécessaire, il suffit d’appuyer sur Entrée :
+To create a task without a deadline, press Enter without entering a value:
 
 ```text
-Deadline (optionnel) :
+Deadline (optional):
 ```
 
-L’identifiant est généré automatiquement. L’application cherche le plus grand identifiant existant et lui ajoute `1`.
+Task IDs are generated automatically. The application finds the highest existing ID and adds `1`.
 
-Par exemple, si les IDs existants sont `1`, `2` et `3`, la prochaine tâche recevra l’ID `4`.
+For example, if the existing IDs are `1`, `2`, and `3`, the next task receives ID `4`.
 
 ---
 
-### Lister les tâches
+### Listing Tasks
 
-Dans le menu principal, saisir :
+Select:
 
 ```text
 2
 ```
 
-L’application propose plusieurs méthodes de tri :
+The application asks how the tasks should be sorted:
 
 ```text
-Trier les tâches par :
-1. Priorité
+Sort tasks by:
+1. Priority
 2. Date
-3. Sans tri
+3. No sorting
 
-Votre choix :
+Your choice:
 ```
 
-#### Tri par priorité
+#### Sort by priority
 
-Le tri par priorité utilise l’ordre suivant :
+Priority sorting uses the following order:
 
 ```text
 high
@@ -247,120 +250,108 @@ medium
 low
 ```
 
-Les tâches les plus importantes sont donc affichées en premier.
+The most important tasks are therefore displayed first.
 
-#### Tri par deadline
+#### Sort by deadline
 
-Les deadlines les plus proches sont affichées en premier.
+Tasks with the closest deadlines are displayed first.
 
-Les tâches sans deadline sont placées après celles qui possèdent une échéance.
+Tasks without a deadline are placed after tasks that have one.
 
-#### Sans tri
+#### No sorting
 
-Les tâches sont affichées dans leur ordre actuel dans le repository.
+Tasks are displayed in their current repository order.
 
-Exemple d’affichage :
+Example output:
 
 ```text
-[1] 🔥 | Terminer le projet Dart | HIGH | Deadline: 2026-08-15T00:00:00.000 | À faire
-[2]  | Lire la documentation | MEDIUM | Deadline: Pas de deadline | Terminée
+[1] 🔥 | Complete the Dart project | HIGH | Deadline: 2026-08-15T00:00:00.000 | To do
+[2]  | Read the Dart documentation | MEDIUM | Deadline: No deadline | Completed
 ```
 
-Le symbole `🔥` permet d’identifier visuellement les tâches urgentes.
+Urgent tasks use the `🔥` prefix to make them easier to identify.
+
+> The application's current terminal messages are written in French. The examples in this README are translated to explain their meaning.
 
 ---
 
-### Marquer une tâche comme terminée
+### Marking a Task as Completed
 
-Dans le menu principal, saisir :
+Select:
 
 ```text
 3
 ```
 
-Puis fournir l’identifiant de la tâche :
+Enter the ID of the task:
 
 ```text
-ID de la tâche que tu veux marquer comme terminée : 1
+ID of the task to mark as completed: 1
 ```
 
-Si la tâche existe, son champ `isDone` passe de `false` à `true` et le fichier JSON est mis à jour.
+If the task exists, its `isDone` property changes from `false` to `true`, and the JSON file is updated.
 
-Résultat :
-
-```text
-Tâche marquée comme terminée.
-```
-
-Si l’identifiant n’existe pas :
-
-```text
-Tâche non trouvée.
-```
+If no task matches the ID, the application displays a task-not-found message.
 
 ---
 
-### Supprimer une tâche
+### Deleting a Task
 
-Dans le menu principal, saisir :
+Select:
 
 ```text
 4
 ```
 
-Puis fournir l’identifiant :
+Enter the ID of the task to delete:
 
 ```text
-Id de la tâche que tu veux supprimer : 2
+ID of the task to delete: 2
 ```
 
-La tâche est supprimée de la collection en mémoire puis le fichier `tasks.json` est mis à jour.
+The task is removed from the in-memory collection, and `tasks.json` is updated.
 
-Si aucune tâche ne correspond à l’identifiant, l’application affiche :
-
-```text
-Tâche non trouvée.
-```
+If the ID does not exist, the application displays a task-not-found message.
 
 ---
 
-### Quitter l’application
+### Quitting the Application
 
-Dans le menu principal, saisir :
+Select:
 
 ```text
 5
 ```
 
-L’application termine alors son exécution.
+The program then ends its execution.
 
 ---
 
-## Persistance des données
+## Data Persistence
 
-Les tâches sont enregistrées dans le fichier :
+Tasks are stored in:
 
 ```text
 tasks.json
 ```
 
-Ce fichier est créé dans le répertoire depuis lequel l’application est lancée.
+The file is created in the directory from which the application is launched.
 
-Il est donc recommandé d’exécuter la commande depuis la racine du projet :
+For predictable behavior, run the application from the project root:
 
 ```bash
 dart run bin/task_manager.dart
 ```
 
-### Exemple de données JSON
+### JSON Example
 
-Le contenu est enregistré sous forme de tableau JSON :
+Tasks are persisted as a JSON array:
 
 ```json
 [
   {
     "id": 1,
-    "title": "Terminer le projet Dart",
+    "title": "Complete the Dart project",
     "priority": "high",
     "deadline": "2026-08-15T00:00:00.000",
     "isDone": false,
@@ -368,7 +359,7 @@ Le contenu est enregistré sous forme de tableau JSON :
   },
   {
     "id": 2,
-    "title": "Lire la documentation",
+    "title": "Read the Dart documentation",
     "priority": "medium",
     "deadline": null,
     "isDone": true,
@@ -377,39 +368,43 @@ Le contenu est enregistré sous forme de tableau JSON :
 ]
 ```
 
-Le fichier produit par l’application peut être compacté sur une seule ligne. L’exemple précédent est indenté uniquement pour faciliter sa lecture.
+The file generated by the application may be stored on a single line. The previous example is formatted only to make it easier to read.
 
-### Description des propriétés
+### JSON Properties
 
-| Propriété | Type | Description |
+| Property | Type | Description |
 |---|---|---|
-| `id` | `int` | Identifiant unique de la tâche |
-| `title` | `String` | Titre de la tâche |
-| `priority` | `String` | Priorité : `low`, `medium` ou `high` |
-| `deadline` | `String?` | Date ISO 8601 ou `null` |
-| `isDone` | `bool` | Indique si la tâche est terminée |
-| `type` | `String` | Type : `normal` ou `urgent` |
+| `id` | `int` | Unique task identifier |
+| `title` | `String` | Task title |
+| `priority` | `String` | `low`, `medium`, or `high` |
+| `deadline` | `String?` | ISO 8601 date or `null` |
+| `isDone` | `bool` | Indicates whether the task is completed |
+| `type` | `String` | `normal` or `urgent` |
 
-Lors du démarrage :
+### Loading Process
 
-1. le repository vérifie si `tasks.json` existe ;
-2. s’il n’existe pas, il est créé avec `[]` ;
-3. s’il existe, son contenu est décodé ;
-4. chaque objet JSON est reconstruit en `NormalTask` ou `UrgentTask` ;
-5. les tâches sont conservées en mémoire pendant l’exécution.
+When the application starts:
 
-Lors d’une modification :
+1. the repository checks whether `tasks.json` exists;
+2. if it does not exist, the file is created with `[]`;
+3. if it exists, its content is decoded;
+4. every JSON object is converted into a `NormalTask` or `UrgentTask`;
+5. the tasks are kept in memory while the application is running.
 
-1. la collection en mémoire est mise à jour ;
-2. chaque tâche est convertie avec `toJson()` ;
-3. la collection est encodée en JSON ;
-4. le fichier `tasks.json` est réécrit.
+### Saving Process
+
+When a task is added, updated, completed, or deleted:
+
+1. the in-memory collection is updated;
+2. each task is converted using `toJson()`;
+3. the collection is encoded as JSON;
+4. `tasks.json` is rewritten with the latest data.
 
 ---
 
-## Architecture
+## Project Architecture
 
-### Structure du projet
+### Directory Structure
 
 ```text
 dart-cli-manager/
@@ -442,23 +437,23 @@ dart-cli-manager/
 └── README.md
 ```
 
-### Responsabilités principales
+### Main Responsibilities
 
-| Élément | Responsabilité |
+| Component | Responsibility |
 |---|---|
-| `bin/task_manager.dart` | Point d’entrée et assemblage des composants |
-| `TaskCli` | Interaction avec l’utilisateur via `stdin` et `stdout` |
-| `Task` | Modèle abstrait commun à toutes les tâches |
-| `NormalTask` | Représentation d’une tâche normale |
-| `UrgentTask` | Représentation d’une tâche urgente |
-| `JsonSerializable` | Contrat de sérialisation JSON |
-| `Repository<T>` | Contrat générique d’accès aux données |
-| `TaskRepository` | Chargement, recherche et sauvegarde des tâches |
-| `Priority` | Valeurs autorisées pour la priorité |
-| `TaskType` | Valeurs autorisées pour le type |
-| Exceptions | Représentation des erreurs métier |
+| `bin/task_manager.dart` | Application entry point and dependency creation |
+| `TaskCli` | User interaction through `stdin` and `stdout` |
+| `Task` | Abstract model containing common task properties |
+| `NormalTask` | Concrete representation of a normal task |
+| `UrgentTask` | Concrete representation of an urgent task |
+| `JsonSerializable` | JSON serialization contract |
+| `Repository<T>` | Generic data-access contract |
+| `TaskRepository` | Task loading, searching, updating, and persistence |
+| `Priority` | Allowed priority values |
+| `TaskType` | Allowed task type values |
+| Custom exceptions | Domain-specific failure representation |
 
-### Diagramme de classes
+### Class Diagram
 
 ```mermaid
 classDiagram
@@ -507,6 +502,7 @@ classDiagram
         +load()
         +findAll() List~Task~
         +findById(int id) Task
+        +findIndexById(int id) int
         +add(Task task)
         +update(Task task)
         +delete(int id)
@@ -530,35 +526,54 @@ classDiagram
     TaskCli --> TaskRepository
 ```
 
+### Separation of Responsibilities
+
+The project separates its main concerns into different layers:
+
+```mermaid
+flowchart TD
+    A[CLI layer] --> B[Repository abstraction]
+    B --> C[JSON file storage]
+    B --> D[Task domain models]
+```
+
+- The CLI handles terminal input and output.
+- The models represent the task domain.
+- The repository manages data access and persistence.
+- Interfaces define contracts between components.
+- Exceptions represent expected domain failures.
+
+This separation makes the code easier to understand, test, and extend.
+
 ---
 
-## Concepts Dart utilisés
+## Dart Concepts Demonstrated
 
-### Classe abstraite
+### Abstract Classes
 
-`Task` est une classe abstraite :
+`Task` is an abstract class:
 
 ```dart
 abstract class Task implements JsonSerializable {
-  // Propriétés et comportements communs.
+  // Shared task properties and behavior.
 }
 ```
 
-Elle centralise les propriétés communes :
+It contains the properties shared by every task:
 
-- `id` ;
-- `title` ;
-- `priority` ;
-- `deadline` ;
+- `id`;
+- `title`;
+- `priority`;
+- `deadline`;
 - `isDone`.
 
-Une `Task` ne doit pas être instanciée directement. L’application utilise un sous-type concret.
+A `Task` cannot be instantiated directly. The application uses one of its concrete subclasses.
 
 ---
 
-### Héritage
+### Inheritance
 
-Les classes `NormalTask` et `UrgentTask` héritent de `Task` :
+`NormalTask` and `UrgentTask` inherit from `Task`:
 
 ```dart
 class NormalTask extends Task {
@@ -572,14 +587,14 @@ class UrgentTask extends Task {
 }
 ```
 
-Chaque sous-type fournit ses propres valeurs pour :
+Each subclass provides its own implementation of:
 
 ```dart
 TaskType get type;
 String get displayPrefix;
 ```
 
-Une tâche urgente affiche notamment le préfixe :
+Urgent tasks use the following display prefix:
 
 ```text
 🔥
@@ -587,23 +602,23 @@ Une tâche urgente affiche notamment le préfixe :
 
 ---
 
-### Polymorphisme
+### Polymorphism
 
-Le repository manipule une collection de `Task` :
+The repository stores a collection of the abstract `Task` type:
 
 ```dart
 final List<Task> _tasks = [];
 ```
 
-Cette collection peut contenir aussi bien des instances de `NormalTask` que de `UrgentTask`.
+The same collection can contain both `NormalTask` and `UrgentTask` instances.
 
-Le code peut ainsi manipuler les objets à travers leur type abstrait commun sans connaître systématiquement leur classe concrète.
+This allows the repository to manipulate tasks through their common abstract type without depending on every concrete subclass.
 
 ---
 
-### Interface
+### Interfaces
 
-L’interface `JsonSerializable` définit le contrat suivant :
+The `JsonSerializable` interface defines a serialization contract:
 
 ```dart
 abstract interface class JsonSerializable {
@@ -611,13 +626,13 @@ abstract interface class JsonSerializable {
 }
 ```
 
-`Task` implémente ce contrat et doit donc fournir une méthode `toJson()`.
+Because `Task` implements this interface, it must provide a `toJson()` method.
 
 ---
 
-### Génériques
+### Generics
 
-L’interface `Repository<T>` est générique :
+The repository interface uses a generic type parameter:
 
 ```dart
 abstract interface class Repository<T> {
@@ -630,7 +645,7 @@ abstract interface class Repository<T> {
 }
 ```
 
-Le repository concret spécialise cette interface avec `Task` :
+The concrete repository specializes the interface for tasks:
 
 ```dart
 class TaskRepository implements Repository<Task> {
@@ -638,13 +653,13 @@ class TaskRepository implements Repository<Task> {
 }
 ```
 
-Cette approche permet de définir un contrat réutilisable pour d’autres types d’entités.
+This generic contract could later be reused for other entity types.
 
 ---
 
 ### Enums
 
-Les priorités sont représentées par un enum :
+Task priorities use an enum:
 
 ```dart
 enum Priority {
@@ -654,7 +669,7 @@ enum Priority {
 }
 ```
 
-Les types de tâches sont également représentés par un enum :
+Task types also use an enum:
 
 ```dart
 enum TaskType {
@@ -663,13 +678,13 @@ enum TaskType {
 }
 ```
 
-Les enums évitent les valeurs arbitraires et rendent le domaine plus sûr que l’utilisation de chaînes libres dans le code métier.
+Enums prevent unsupported values from being used inside the domain model.
 
 ---
 
-### Programmation asynchrone
+### Asynchronous Programming
 
-Les opérations de lecture et d’écriture utilisent `Future`, `async` et `await` :
+File operations use `Future`, `async`, and `await`:
 
 ```dart
 Future<void> load() async {
@@ -677,17 +692,38 @@ Future<void> load() async {
 }
 ```
 
-Cela permet de ne pas bloquer inutilement le programme pendant les opérations d’entrée-sortie.
+This provides a clean asynchronous API for reading and writing data.
 
 ---
 
-## Gestion des erreurs
+### JSON Serialization
 
-Le projet définit plusieurs exceptions personnalisées.
+Tasks implement `toJson()` to convert themselves into JSON-compatible maps:
+
+```dart
+Map<String, dynamic> toJson() {
+  return {
+    'id': id,
+    'title': title,
+    'priority': priority.name,
+    'deadline': deadline?.toIso8601String(),
+    'isDone': isDone,
+    'type': type.name,
+  };
+}
+```
+
+The `Task.fromJson()` factory reconstructs the appropriate subclass based on the stored `type`.
+
+---
+
+## Error Handling
+
+The project defines several custom exceptions.
 
 ### `DuplicatedTaskException`
 
-Déclenchée lorsqu’une tâche possède un identifiant déjà utilisé :
+Thrown when a task uses an ID that already exists:
 
 ```dart
 throw DuplicatedTaskException('Task already exists');
@@ -695,7 +731,7 @@ throw DuplicatedTaskException('Task already exists');
 
 ### `InvalidTaskException`
 
-Utilisée lorsqu’une tâche ou le contenu JSON est invalide :
+Used when a task or JSON data is invalid:
 
 ```dart
 throw InvalidTaskException('Invalid JSON format');
@@ -703,120 +739,114 @@ throw InvalidTaskException('Invalid JSON format');
 
 ### `TaskNotFoundException`
 
-Déclenchée lorsqu’une opération cible une tâche inexistante :
+Thrown when an operation targets a task that does not exist:
 
 ```dart
 throw TaskNotFoundException('Task not found');
 ```
 
-Ces exceptions permettent de différencier les erreurs techniques et métier au lieu d’utiliser une exception générique pour toutes les situations.
+Custom exceptions make failures more explicit and prevent every error from being represented by a generic exception.
 
 ---
 
-## Tests
+## Testing
 
-Les tests utilisent le package officiel `test`.
+The test suite uses the official Dart `test` package.
 
-Installer les dépendances si nécessaire :
-
-```bash
-dart pub get
-```
-
-Exécuter tous les tests :
+### Run all tests
 
 ```bash
 dart test
 ```
 
-Exécuter uniquement le fichier de tests actuel :
+### Run the current test file
 
 ```bash
 dart test test/taski_manager_test.dart
 ```
 
-Afficher davantage de détails :
+### Use the expanded reporter
 
 ```bash
 dart test --reporter expanded
 ```
 
-### Scénarios couverts
+### Current Test Cases
 
-Le projet contient actuellement six tests :
+The project currently contains six tests:
 
-1. ajout d’une tâche ;
-2. refus d’un identifiant déjà utilisé ;
-3. recherche d’une tâche par son identifiant ;
-4. mise à jour d’une tâche existante ;
-5. suppression d’une tâche ;
-6. passage d’une tâche à l’état terminé.
+1. adding a task;
+2. rejecting a duplicated task ID;
+3. finding a task by ID;
+4. updating an existing task;
+5. deleting an existing task;
+6. marking a task as completed.
 
-### Isolation du système de fichiers
+### File System Isolation
 
-Les tests ne modifient pas le fichier `tasks.json` réel.
+Tests do not modify the application's real `tasks.json` file.
 
-Chaque test utilise un répertoire temporaire :
+A temporary directory is created during each test:
 
 ```dart
 tempDir = await Directory.systemTemp.createTemp();
 file = File('${tempDir.path}/tasks.json');
 ```
 
-Après le test, le répertoire est supprimé :
+The directory is removed after the test:
 
 ```dart
 await tempDir.delete(recursive: true);
 ```
 
-Cette stratégie garantit que les tests sont :
+This strategy makes the tests:
 
-- isolés ;
-- reproductibles ;
-- indépendants des données de l’utilisateur ;
-- sans effet secondaire durable sur le projet.
+- isolated;
+- reproducible;
+- independent from user data;
+- free from persistent file-system side effects.
 
 ---
 
-## Qualité du code
+## Code Quality
 
-### Formater le projet
+### Format the project
 
 ```bash
 dart format .
 ```
 
-Vérifier le formatage sans modifier les fichiers :
+### Verify formatting without modifying files
 
 ```bash
 dart format --output=none --set-exit-if-changed .
 ```
 
-### Exécuter l’analyse statique
+### Run static analysis
 
 ```bash
 dart analyze
 ```
 
-Les règles d’analyse sont configurées dans :
+The analysis rules are configured in:
 
 ```text
 analysis_options.yaml
 ```
 
-Le projet utilise notamment les lints recommandés :
+The project uses Dart's recommended lints:
 
 ```yaml
 include: package:lints/recommended.yaml
 ```
 
-### Exécuter les tests
+### Run the tests
 
 ```bash
 dart test
 ```
 
-### Vérification complète avant un commit
+### Recommended check before committing
 
 ```bash
 dart format .
@@ -825,7 +855,7 @@ dart test
 git status
 ```
 
-Exemple de commit :
+Example commit:
 
 ```bash
 git add .
@@ -835,52 +865,52 @@ git push
 
 ---
 
-## Dépendances
+## Dependencies
 
-Les dépendances sont déclarées dans `pubspec.yaml`.
+Dependencies are declared in `pubspec.yaml`.
 
-### Dépendances principales
+### Runtime Dependencies
 
-| Package | Rôle |
+| Package | Purpose |
 |---|---|
-| `args` | Prévu pour l’analyse d’arguments de ligne de commande |
-| `path` | Utilitaire de manipulation de chemins |
+| `args` | Available for a future argument-based CLI |
+| `path` | Utilities for working with file-system paths |
 
-L’interface actuelle est interactive et repose directement sur :
+The current CLI is interactive and directly uses:
 
 ```dart
 stdin.readLineSync();
 stdout.write();
 ```
 
-Le package `args` pourra être utilisé dans une future version proposant des commandes non interactives comme :
+The `args` package may later be used to provide non-interactive commands such as:
 
 ```bash
 task-manager add
 task-manager list
 ```
 
-### Dépendances de développement
+### Development Dependencies
 
-| Package | Rôle |
+| Package | Purpose |
 |---|---|
-| `lints` | Règles d’analyse statique |
-| `test` | Écriture et exécution des tests |
+| `lints` | Static analysis rules |
+| `test` | Unit test creation and execution |
 
 ---
 
-## Configuration avec Zed
+## Zed Configuration
 
-Le projet peut être utilisé avec l’extension Dart de Zed.
+The project can be developed using Zed's Dart extension.
 
-Vérifier que Dart est accessible :
+Verify that Dart is available:
 
 ```bash
 command -v dart
 dart --version
 ```
 
-Exemple de configuration `.zed/settings.json` :
+Example `.zed/settings.json` configuration:
 
 ```json
 {
@@ -909,7 +939,7 @@ Exemple de configuration `.zed/settings.json` :
 }
 ```
 
-Si Zed ne trouve pas Dart, préciser son chemin absolu :
+If Zed cannot find Dart, configure the absolute SDK path:
 
 ```json
 {
@@ -927,7 +957,7 @@ Si Zed ne trouve pas Dart, préciser son chemin absolu :
 }
 ```
 
-Adapter `/usr/bin/dart` au résultat de :
+Replace `/usr/bin/dart` with the result of:
 
 ```bash
 readlink -f "$(command -v dart)"
@@ -935,78 +965,80 @@ readlink -f "$(command -v dart)"
 
 ---
 
-## Correspondance avec les objectifs du projet
+## Project Requirements Coverage
 
-| Exigence | Implémentation |
+| Requirement | Implementation |
 |---|---|
-| Ajouter une tâche | `TaskCli.addTask()` |
-| Titre et priorité | Propriétés de `Task` |
-| Deadline optionnelle | `DateTime? deadline` |
-| Lister les tâches | `TaskCli.listTasks()` |
-| Tri par priorité | Comparaison de `Priority.index` |
-| Tri par date | Comparaison de `DateTime` |
-| Marquer comme terminée | `TaskRepository.markAsDone()` |
-| Supprimer une tâche | `TaskRepository.delete()` |
-| Persistance JSON | `TaskRepository.load()` et `_save()` |
-| Classe abstraite | `Task` |
-| Héritage | `NormalTask` et `UrgentTask` |
-| Interface | `JsonSerializable` et `Repository<T>` |
-| Génériques | `Repository<T>` |
-| Exceptions personnalisées | Trois exceptions métier |
-| Au moins cinq tests | Six tests repository |
-| Dart pur | Aucune dépendance à Flutter |
+| Add a task | `TaskCli.addTask()` |
+| Title and priority | Properties of `Task` |
+| Optional deadline | `DateTime? deadline` |
+| List tasks | `TaskCli.listTasks()` |
+| Sort by priority | Comparison using `Priority.index` |
+| Sort by date | Comparison using `DateTime` |
+| Mark as completed | `TaskRepository.markAsDone()` |
+| Delete a task | `TaskRepository.delete()` |
+| JSON persistence | `TaskRepository.load()` and `_save()` |
+| Abstract class | `Task` |
+| Inheritance | `NormalTask` and `UrgentTask` |
+| Interface | `JsonSerializable` and `Repository<T>` |
+| Generics | `Repository<T>` |
+| Custom exceptions | Three domain-specific exceptions |
+| At least five tests | Six repository tests |
+| Pure Dart | No Flutter dependency |
 
 ---
 
-## Limites actuelles
+## Current Limitations
 
-Le projet est volontairement simple et possède encore quelques limites :
+The project is intentionally simple and currently has the following limitations:
 
-- l’interface est uniquement interactive ;
-- les valeurs `normal`, `urgent`, `low`, `medium` et `high` doivent être saisies exactement ;
-- le type urgent est choisi manuellement et n’est pas automatiquement lié à la priorité `high` ;
-- le stockage utilise un seul fichier JSON local ;
-- le fichier JSON n’est pas protégé contre des écritures concurrentes ;
-- toutes les tâches sont chargées en mémoire ;
-- les identifiants sont des entiers auto-incrémentés localement ;
-- les dates ne définissent pas explicitement de fuseau horaire ;
-- aucune confirmation n’est demandée avant une suppression ;
-- les tests actuels couvrent principalement le repository ;
-- l’application ne propose pas encore de commandes avec des options comme `--priority` ou `--deadline`.
+- the interface is interactive only;
+- values such as `low`, `medium`, `high`, `normal`, and `urgent` must be entered exactly;
+- urgent tasks are selected manually and are not automatically linked to the `high` priority;
+- all tasks are stored in a single local JSON file;
+- concurrent file writes are not handled;
+- all tasks are loaded into memory;
+- IDs are local auto-incrementing integers;
+- deadlines do not explicitly include time-zone handling;
+- task deletion does not require confirmation;
+- current tests mainly cover the repository;
+- argument-based commands such as `--priority` and `--deadline` are not implemented yet.
 
 ---
 
-## Améliorations possibles
+## Possible Improvements
 
-Plusieurs évolutions peuvent être envisagées :
+Potential future improvements include:
 
-- ajouter un `TaskService` entre la CLI et le repository ;
-- séparer davantage les règles métier de l’interface utilisateur ;
-- ajouter des tests pour la sérialisation JSON ;
-- tester le chargement des tâches depuis le fichier ;
-- tester les erreurs de JSON invalide ;
-- ajouter des tests pour le tri ;
-- ajouter des tests pour les tâches urgentes ;
-- utiliser le package `args` pour proposer une CLI non interactive ;
-- ajouter une commande de modification de tâche ;
-- ajouter une confirmation avant suppression ;
-- filtrer les tâches terminées et non terminées ;
-- rechercher une tâche par titre ;
-- générer des identifiants UUID ;
-- écrire le JSON de manière atomique avec un fichier temporaire ;
-- ajouter une date de création ;
-- gérer les deadlines dépassées ;
-- afficher les dates dans un format plus lisible ;
-- compiler l’application en exécutable natif ;
-- ajouter une intégration continue GitHub Actions.
+- adding a `TaskService` between the CLI and repository;
+- moving business rules out of the terminal interface;
+- adding JSON serialization tests;
+- testing task loading from disk;
+- testing invalid JSON handling;
+- adding sorting tests;
+- adding urgent task tests;
+- using the `args` package for a non-interactive CLI;
+- adding a task editing command;
+- asking for confirmation before deletion;
+- filtering completed and uncompleted tasks;
+- searching tasks by title;
+- generating UUID identifiers;
+- writing JSON atomically through a temporary file;
+- adding task creation dates;
+- detecting overdue deadlines;
+- improving date formatting;
+- compiling the application into a native executable;
+- adding GitHub Actions continuous integration.
 
-Exemple de compilation native future :
+### Native compilation
+
+The application can eventually be compiled into a native executable:
 
 ```bash
 dart compile exe bin/task_manager.dart -o build/task-manager
 ```
 
-Puis :
+Run the generated executable with:
 
 ```bash
 ./build/task-manager
@@ -1014,21 +1046,21 @@ Puis :
 
 ---
 
-## Contribution
+## Contributing
 
-Les contributions sont les bienvenues.
+Contributions are welcome.
 
-### Procédure proposée
+### Suggested Workflow
 
-1. créer un fork du dépôt ;
-2. créer une branche :
+1. Fork the repository.
+2. Create a feature branch:
 
 ```bash
-git switch -c feature/nom-de-la-fonctionnalite
+git switch -c feature/feature-name
 ```
 
-3. effectuer les modifications ;
-4. formater et valider le projet :
+3. Implement the change.
+4. Format, analyze, and test the project:
 
 ```bash
 dart format .
@@ -1036,36 +1068,36 @@ dart analyze
 dart test
 ```
 
-5. créer un commit :
+5. Create a commit:
 
 ```bash
 git add .
 git commit -m "feat: add new feature"
 ```
 
-6. pousser la branche :
+6. Push the branch:
 
 ```bash
-git push -u origin feature/nom-de-la-fonctionnalite
+git push -u origin feature/feature-name
 ```
 
-7. ouvrir une Pull Request sur GitHub.
+7. Open a Pull Request on GitHub.
 
 ---
 
-## Ressources
+## Resources
 
-- [Documentation officielle Dart](https://dart.dev/)
-- [Guide des packages Dart](https://dart.dev/tools/pub/packages)
-- [Documentation de `dart:io`](https://api.dart.dev/dart-io/)
-- [Documentation de `dart:convert`](https://api.dart.dev/dart-convert/)
-- [Package `test`](https://pub.dev/packages/test)
-- [Package `lints`](https://pub.dev/packages/lints)
-- [Documentation GitHub sur Mermaid](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams)
+- [Official Dart documentation](https://dart.dev/)
+- [Dart package documentation](https://dart.dev/tools/pub/packages)
+- [`dart:io` documentation](https://api.dart.dev/dart-io/)
+- [`dart:convert` documentation](https://api.dart.dev/dart-convert/)
+- [`test` package](https://pub.dev/packages/test)
+- [`lints` package](https://pub.dev/packages/lints)
+- [GitHub Mermaid documentation](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams)
 
 ---
 
-## Auteur
+## Author
 
-Projet réalisé dans le cadre d’un exercice de maîtrise de Dart et de développement d’une application complète en ligne de commande.
+This project was created as a practical exercise to demonstrate Dart proficiency by building a complete command-line application.
 `
